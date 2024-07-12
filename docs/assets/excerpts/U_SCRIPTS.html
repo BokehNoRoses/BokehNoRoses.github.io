@@ -1,0 +1,502 @@
+<h2><span style="color: var(--green);">bokehnorose@github</span>:<span style="color: var(--green);">~</span>$ <span class="type" style="--n:35">cat useful_scripts.md | less</span> <span style="animation: blink-caret .7s infinite">!</span></h2>
+<div class="flip">
+	<h1 style="--time: 0.8s;">Useful</h1>
+	<h1 style="--time: 1.0s;">&ensp;Scripts</h1>
+</div>
+<h2><span class="type" style="--n:50">&emsp;PipeWire, ALSA, and PulseAudio</span></h2>
+</br>
+<div class="code-block">
+	<p class="code-indent">```<span class="code-tag">bash</span></p>
+	<p><span class="type" style="--n: 100; --text-color: var(--green);"># I use the following to resample incoming audio on monitors attached to the PipeWire daemon</span></p>
+	<p><span class="type" style="--n: 150; --text-color: var(--green);"># It's a little more involved than using `pacmd list-sinks | grep -Ei 'index:|name:'` with PulseAudio</span></p>
+	<p><span class="type" style="--n: 150; --text-color: var(--green);"># Chiefly for the reason that audio sources aren't constantly attached to a Capture or Monitor until they are transmitting in PipeWire</span></p>
+	<p><span class="type" style="--n: 150; --text-color: var(--green);"># So I had to compare where `pw-record` was attaching by default with a utility like `qpwgraph` and came up with the following code:</span></p>
+	</br>
+	<p><span class="type" style="--n: 1000">
+		</br>$ cat pwrec.sh</br>
+		</br>#!/bin/bash</br></br>
+		shopt -s extglob </br>
+		if [ "$#" -eq 1 ]; then </br>
+		  &emsp;case "$1" in </br>
+		    &emsp;&emsp;*.wav|*.mp3|*.opus|*.flac|*.ogg|*.aac|*.aiff|*.pcm)  </br>
+		      &emsp;&emsp;;; </br>
+		    &emsp;*) </br>
+		      &emsp;&emsp;echo 'File format is either not supported by PipeWire or libsndfile.' </br>
+		      &emsp;&emsp;exit 1 </br>
+		      &emsp;&emsp;;; </br>
+		  &emsp;esac </br>
+		else </br>
+		  &emsp;echo 'Too many filenames for recording (max: 1).' </br>
+		  &emsp;exit 1 </br>
+		fi </br>
+		 </br>
+		if [ -f "$(which pw-dump 2> /dev/null)" ]; then </br>
+		  &emsp;monitors=$(pw-dump | sed -rn 's/.*"(.*:monitor_FL)",/\1/p' | cut -d : -f 1 | tr '\n' ';' | sed -rn 's/(.*);$/\1/p') </br>
+		  &emsp;if [ -n "$monitors" ]; then </br>
+		    &emsp;&emsp;n=$(echo $monitors | tr ';' '\n' | wc -l) </br>
+		    &emsp;&emsp;echo $monitors | tr ';' '\n' | cat -n </br>
+		    &emsp;&emsp;read -p "Select a monitor to record [1-${n}]: " answer  </br>
+		    &emsp;&emsp;if [ $answer -ge 1 ] && [ $answer -le $n ]; then </br>
+		      &emsp;&emsp;&emsp;search=$(echo $monitors | cut -d ';' -f ${answer}) </br>
+		      &emsp;&emsp;&emsp;pw-record -v --target=$(pw-dump | grep "\"node.nick\": \"${search}\"" -A 4 -m 1 | sed -rn 's/.*serial": ([0-9]+).*/\1/p') $1 </br>
+		    &emsp;&emsp;fi </br>
+		    &emsp;&emsp;else </br>
+		    &emsp;&emsp;&emsp;echo 'No audio card monitors detected.' </br>
+		  &emsp;fi </br>
+		  &emsp;else </br>
+		   &emsp;&emsp;echo 'PipeWire is not installed on the system.' </br>
+		fi
+	</span></p>
+	<p class="code-indent">```</p>
+</div>
+</br></br>
+<h2><span class="type" style="--n:50">&emsp;Cryptography</span></h2>
+</br>
+<div class="code-block">
+	<p class="code-indent">```<span class="code-tag">bash</span></p>
+	<p><span class="type" style="--n: 100; --text-color: var(--green);"># I used the following code to help practice with setting the server-side and client-side certificates for Jellyfin server over Traefik</span></p>
+	<p><span class="type" style="--n: 150; --text-color: var(--green);"># It's pretty inflexible as is, but it was good enough for me to work through the CSR process using CAs in the non-conventional way</span></p>
+	<p><span class="type" style="--n: 150; --text-color: var(--green);"># All credit goes to GoLinuxCloud.com for their very informative tutorial that I based the structure of the program on</span></p>
+	</br>
+	<p><span class="type" style="--n: 500">
+		</br>$ cat genenc.sh</br>
+		</br>#!/usr/bin/bash</br></br>
+		if [[ -z $@ ]]; then </br>
+        		&emsp;OUTFILE="passwd" </br>
+		else </br>
+        		&emsp;while getopts "o:" OPT; do </br>
+                		&emsp;&emsp;OUTFILE=${OPTARG} </br>
+        		&emsp;done </br>
+		fi </br>
+		</br>
+		echo $RANDOM | md5sum | head -c 20 > ${OUTFILE}_pt.enc </br>
+		openssl enc -aes256 -pbkdf2 -salt -in ${OUTFILE}_pt.enc -out ${OUTFILE}.enc </br>
+		chmod 0500 {${OUTFILE}_pt.enc,${OUTFILE}.enc} </br>
+		</br>
+	</span></p>
+	<p><span class="type" style="--n: 16741; --time: .0025s">
+		</br>$ cat genssl.sh</br>
+		</br>#!/usr/bin/bash</br></br>
+		# MUST BE RUN AS SUDO!
+ 		</br>
+		if [[ -z $@ ]]; then </br>
+		        &emsp;dir=/etc/ssl </br>
+		else </br>
+		        &emsp;while getopts "d:" OPT; do </br>
+		                &emsp;&emsp;dir=${OPTARG} </br>
+		        &emsp;done </br>
+		fi </br>
+		 </br>
+		rm -r -f $dir/{root,intermediate,server,client,config} </br>
+		 </br>
+		mkdir -p $dir/{root,intermediate,server,client}/{certs,private,secret} </br>
+		mkdir -p $dir/config/ext/{server,client} </br>
+		touch $dir/{root,intermediate}/index.txt </br>
+		 </br>
+		for cnf in server client; do </br>
+		    &emsp;touch $dir/config/ext/${cnf}.cnf </br>
+		done </br>
+		 </br>
+		for ser in root intermediate; do </br>
+		    &emsp;echo 01 > $dir/$ser/serial </br>
+		    &emsp;echo 01 > $dir/$ser/crlnumber </br>
+		    &emsp;mkdir -p $dir/$ser/newcerts </br>
+		    &emsp;touch $dir/config/${ser}.cnf </br>
+		done </br>
+		 </br>
+		read -e -p "Enter the name for the Root CA: " root_name </br>
+		read -e -p "Enter the name for the Intermediate CA: " ca_name </br>
+		read -e -p "Enter the name for the server certificate: " srv_name </br>
+		read -e -p "Enter the name of the client certificate: " client_name </br>
+		echo </br>
+		echo "Create a password for the Intermediate CA" </br>
+		./genenc.sh -o $dir/intermediate/secret/${ca_name} </br>
+		echo </br>
+		echo "Create a password for the wildcard localhost server certificate" </br>
+		./genenc.sh -o $dir/server/secret/localhost </br>
+		echo </br>
+		echo "Create a password for the $client_name client" </br>
+		./genenc.sh -o $dir/client/secret/${client_name} </br>
+		 </br>
+		 </br>
+		cat << EOF > $dir/config/root.cnf </br>
+		#################################################################### </br>
+		[ ca ] </br>
+		default_ca	= CA_default		# The default ca section for openssl ca cmd </br>
+		 </br>
+		#################################################################### </br>
+		[ CA_default ] </br>
+		 </br>
+		dir	        = $dir/root		# Where everything is kept </br>
+		certs		= $dir/root/certs		# Where the issued certs are kept </br>
+		crl_dir		= $dir/root/crl		# Where the issued crl are kept </br>
+		database	= $dir/root/index.txt	# database index file. </br>
+		new_certs_dir	= $dir/root/newcerts		# default place for new certs. </br>
+		certificate	= $dir/root/certs/${root_name}.crt 	# the CA certificate </br>
+		serial		= $dir/root/serial 		# The current serial number </br>
+		crlnumber	= $dir/root/crlnumber	# the current crl number </br>
+		crl		= $dir/root/crl.pem 		# The current CRL </br>
+		private_key	= $dir/root/private/${root_name}.key # The private key </br>
+		x509_extensions	= usr_cert		# The extensions to add to the cert </br>
+		crl_extensions	= crl_ext               # The extensions to add to the CRL </br>
+		name_opt 	= ca_default		# Subject Name options </br>
+		cert_opt 	= ca_default		# Certificate field options </br>
+		default_days	= 365			# how long to certify for </br>
+		default_crl_days= 30			# how long before next CRL </br>
+		default_md	= sha256		# use public key default MD </br>
+		preserve	= no			# keep passed DN ordering </br>
+		policy		= policy_match </br>
+		 </br>
+		 </br>
+		# For the root CA policy - MIGHT NEED FOR INTERMEDIATE IF GEO MATTERS </br>
+		[ policy_match ] </br>
+		countryName		= match # client CSRs must match CA </br>
+		stateOrProvinceName	= match # client CSRs must match CA </br>
+		organizationName	= match # client CSRs must match CA </br>
+		organizationalUnitName	= optional </br>
+		commonName		= supplied </br>
+		emailAddress		= optional </br>
+		 </br>
+		#################################################################### </br>
+		 </br>
+		[ req ] # for openssl req cmd </br>
+		default_bits		= 2048 </br>
+		default_keyfile 	= priv.key </br>
+		distinguished_name	= req_distinguished_name </br>
+		# attributes		= req_attributes </br>
+		# x509_extensions	= v3_ca	# The extensions to add to the self signed cert </br>
+		# req_extensions = v3_req # The extensions to add to a certificate request </br>
+		string_mask = utf8only </br>
+		 </br>
+		 </br>
+		[ req_distinguished_name ] </br>
+		countryName			= Country Name (2 letter code) </br>
+		countryName_default		= AU </br>
+		countryName_min			= 2 </br>
+		countryName_max			= 2 </br>
+		stateOrProvinceName		= State or Province Name (full name) </br>
+		stateOrProvinceName_default	= Some-State </br>
+		localityName			= Locality Name (eg, city) </br>
+		0.organizationName		= Organization Name (eg, company) </br>
+		0.organizationName_default	= Internet Widgits Pty Ltd </br>
+		organizationalUnitName		= Organizational Unit Name (eg, section) </br>
+		organizationalUnitName_default	= Admin </br>
+		commonName			= Common Name (e.g. server FQDN or YOUR name) </br>
+		commonName_max			= 64 </br>
+		emailAddress			= Email Address </br>
+		emailAddress_max		= 64 </br>
+		 </br>
+		 </br>
+		[ req_attributes ] </br>
+		challengePassword		= A challenge password </br>
+		challengePassword_min		= 4 </br>
+		challengePassword_max		= 20 </br>
+		unstructuredName		= An optional company name </br>
+		 </br>
+		 </br>
+		# These extensions are added when 'ca' signs a request. </br>
+		[ usr_cert ] </br>
+		 </br>
+		basicConstraints=CA:FALSE </br>
+		subjectKeyIdentifier=hash </br>
+		authorityKeyIdentifier=keyid,issuer </br>
+		subjectAltName=email:copy </br>
+		issuerAltName=issuer:copy </br>
+		 </br>
+		 </br>
+		# Extensions to add to a certificate request - MUST BE MANUALLY SPECIFIED </br>
+		[ v3_req ] </br>
+		 </br>
+		basicConstraints = CA:FALSE </br>
+		keyUsage = nonRepudiation, digitalSignature, keyEncipherment </br>
+		 </br>
+		 </br>
+		# Extensions for a typical CA - MUST BE MANUALLY SPECIFIED </br>
+		[ v3_ca ] </br>
+		 </br>
+		basicConstraints = critical,CA:true </br>
+		subjectKeyIdentifier=hash </br>
+		authorityKeyIdentifier=keyid:always,issuer </br>
+		# keyUsage = cRLSign, keyCertSign # does not work with self-signed certs </br>
+		subjectAltName=email:copy </br>
+		issuerAltName=issuer:copy </br>
+		 </br>
+		 </br>
+		[ v3_intermediate_ca ] </br>
+		subjectKeyIdentifier = hash </br>
+		authorityKeyIdentifier = keyid:always,issuer </br>
+		basicConstraints = critical,CA:true,pathlen:0 </br>
+		keyUsage = critical,digitalSignature,cRLSign,keyCertSign </br>
+		 </br>
+		 </br>
+		[ crl_ext ] </br>
+		 </br>
+		issuerAltName=issuer:copy </br>
+		authorityKeyIdentifier=keyid:always </br>
+		EOF </br>
+		 </br>
+		 </br>
+		cat << EOF > $dir/config/intermediate.cnf </br>
+		#################################################################### </br>
+		[ ca ] </br>
+		default_ca	= CA_default		# The default ca section for openssl ca cmd </br>
+		 </br>
+		#################################################################### </br>
+		[ CA_default ] </br>
+		 </br>
+		dir		= $dir/intermediate # Where everything is kept </br>
+		certs		= $dir/intermediate/certs		# Where the issued certs are kept </br>
+		crl_dir		= $dir/intermediate/crl		# Where the issued crl are kept </br>
+		database	= $dir/intermediate/index.txt	# database index file. </br>
+		new_certs_dir	= $dir/intermediate/newcerts		# default place for new certs. </br>
+		certificate	= $dir/intermediate/certs/${ca_name}.crt 	        # The CA certificate </br>
+		serial		= $dir/intermediate/serial 		# The current serial number </br>
+		crlnumber	= $dir/intermediate/crlnumber	# the current crl number </br>
+		crl		= $dir/intermediate/crl.pem 		# The current CRL </br>
+		private_key	= $dir/intermediate/private/${ca_name}.key   # The private key </br>
+		x509_extensions	= usr_cert		# The extensions to add to the cert </br>
+		crl_extensions	= crl_ext       # The extensions to add to the CRL </br>
+		name_opt 	= ca_default		# Subject Name options </br>
+		cert_opt 	= ca_default		# Certificate field options </br>
+		default_days	= 365			# how long to certify for </br>
+		default_crl_days= 30			# how long before next CRL </br>
+		default_md	= sha256		# use public key default MD </br>
+		preserve	= no			# keep passed DN ordering </br>
+		policy		= policy_anything </br>
+		 </br>
+		 </br>
+		# For the intermediate CA policy - MIGHT NEED MATCH IF GEO MATTERS </br>
+		[ policy_anything ] </br>
+		countryName		= optional </br>
+		stateOrProvinceName	= optional </br>
+		localityName		= optional </br>
+		organizationName	= optional </br>
+		organizationalUnitName	= optional </br>
+		commonName		= supplied </br>
+		emailAddress		= optional </br>
+		 </br>
+		#################################################################### </br>
+		 </br>
+		[ req ] # for openssl req cmd </br>
+		default_bits		= 2048 </br>
+		default_keyfile 	= priv.key </br>
+		distinguished_name	= req_distinguished_name </br>
+		# attributes		= req_attributes </br>
+		# x509_extensions	= v3_ca	# The extensions to add to the self signed cert </br>
+		# req_extensions = v3_req # The extensions to add to a certificate request </br>
+		string_mask = utf8only </br>
+		 </br>
+		 </br>
+		[ req_distinguished_name ] </br>
+		countryName			= Country Name (2 letter code) </br>
+		countryName_default		= AU </br>
+		countryName_min			= 2 </br>
+		countryName_max			= 2 </br>
+		stateOrProvinceName		= State or Province Name (full name) </br>
+		stateOrProvinceName_default	= Some-State </br>
+		localityName			= Locality Name (eg, city) </br>
+		0.organizationName		= Organization Name (eg, company) </br>
+		0.organizationName_default	= Internet Widgits Pty Ltd </br>
+		organizationalUnitName		= Organizational Unit Name (eg, section) </br>
+		organizationalUnitName_default	= Admin </br>
+		commonName			= Common Name (e.g. server FQDN or YOUR name) </br>
+		commonName_max			= 64 </br>
+		emailAddress			= Email Address </br>
+		emailAddress_max		= 64 </br>
+		 </br>
+		 </br>
+		[ req_attributes ] </br>
+		challengePassword		= A challenge password </br>
+		challengePassword_min		= 4 </br>
+		challengePassword_max		= 20 </br>
+		unstructuredName		= An optional company name </br>
+		 </br>
+		 </br>
+		# These extensions are added when 'ca' signs a request. </br>
+		[ usr_cert ] </br>
+		 </br>
+		basicConstraints=CA:FALSE </br>
+		subjectKeyIdentifier=hash </br>
+		authorityKeyIdentifier=keyid,issuer </br>
+		subjectAltName=email:copy </br>
+		issuerAltName=issuer:copy </br>
+		 </br>
+		 </br>
+		# Extensions to add to a certificate request - MUST BE MANUALLY SPECIFIED </br>
+		[ v3_req ] </br>
+		 </br>
+		basicConstraints = CA:FALSE </br>
+		keyUsage = nonRepudiation, digitalSignature, keyEncipherment </br>
+		 </br>
+		 </br>
+		# Extensions for a typical CA - MUST BE MANUALLY SPECIFIED </br>
+		[ v3_ca ] </br>
+		 </br>
+		basicConstraints = critical,CA:true </br>
+		subjectKeyIdentifier=hash </br>
+		authorityKeyIdentifier=keyid:always,issuer </br>
+		# keyUsage = cRLSign, keyCertSign # does not work with self-signed certs </br>
+		subjectAltName=email:copy </br>
+		issuerAltName=issuer:copy </br>
+		 </br>
+		 </br>
+		[ v3_intermediate_ca ] </br>
+		subjectKeyIdentifier = hash </br>
+		authorityKeyIdentifier = keyid:always,issuer </br>
+		basicConstraints = critical,CA:true,pathlen:0 </br>
+		keyUsage = critical,digitalSignature,cRLSign,keyCertSign </br>
+		 </br>
+		 </br>
+		[ crl_ext ] </br>
+		 </br>
+		issuerAltName=issuer:copy </br>
+		authorityKeyIdentifier=keyid:always </br>
+		EOF </br>
+		 </br>
+		 </br>
+		cat << EOF > $dir/config/ext/server.cnf </br>
+		basicConstraints = CA:FALSE </br>
+		nsCertType = server </br>
+		nsComment = "OpenSSL Generated Server Certificate" </br>
+		subjectKeyIdentifier = hash </br>
+		authorityKeyIdentifier = keyid,issuer:always </br>
+		keyUsage = critical, digitalSignature, keyEncipherment </br>
+		extendedKeyUsage = serverAuth </br>
+		subjectAltName = @alt_names </br>
+		 </br>
+		[alt_names] </br>
+		# IP.1 = 192.168.100.3 # TODO: change to an applicable value </br>
+		# IP.2 = 10.0.2.15 # TODO: change to an applicable value </br>
+		DNS.1 = localhost </br>
+		DNS.2 = ${srv_name}.localhost # TODO: change to an applicable value </br>
+		EOF </br>
+		 </br>
+		 </br>
+		cat << EOF > $dir/config/ext/client.cnf </br>
+		basicConstraints = CA:FALSE </br>
+		nsCertType = client, email </br>
+		nsComment = "OpenSSL Generated Client Certificate" </br>
+		subjectKeyIdentifier = hash </br>
+		authorityKeyIdentifier = keyid,issuer </br>
+		keyUsage = critical, nonRepudiation, digitalSignature, keyEncipherment </br>
+		extendedKeyUsage = clientAuth, emailProtection </br>
+		EOF </br>
+		 </br>
+		echo "Generating Root CA private key..." </br>
+		openssl genpkey \ </br>
+			&emsp;-algorithm RSA \ </br>
+			&emsp;-pkeyopt rsa_keygen_bits:4096 \ </br>
+			&emsp;-out $dir/root/private/${root_name}.key </br>
+		echo </br>
+		 </br>
+		echo "Generating Root CA certificate..." </br>
+		openssl req \ </br>
+			&emsp;-new -x509 \ </br>
+			&emsp;-config $dir/config/root.cnf \ </br>
+			&emsp;-extensions v3_ca \ </br>
+			&emsp;-days 3650 \ </br>
+			&emsp;-key $dir/root/private/${root_name}.key \ </br>
+			&emsp;-out $dir/root/certs/${root_name}.crt \ </br>
+			&emsp;-outform PEM </br>
+		echo </br>
+		 </br>
+		echo "Generating Intermediate CA private key..." </br>
+		openssl genpkey \ </br>
+			&emsp;-algorithm RSA \ </br>
+			&emsp;-pkeyopt rsa_keygen_bits:2048 \ </br>
+			&emsp;-pass file:$dir/intermediate/secret/${ca_name}.enc \ </br>
+			&emsp;-out $dir/intermediate/private/${ca_name}.key </br>
+		echo </br>
+		 </br>
+		echo "Generating Intermediate CA CSR..." </br>
+		openssl req \ </br>
+			&emsp;-new -sha256 \ </br>
+			&emsp;-config $dir/config/intermediate.cnf \ </br>
+			&emsp;-passin file:$dir/intermediate/secret/${ca_name}.enc \ </br>
+			&emsp;-key $dir/intermediate/private/${ca_name}.key \ </br>
+			&emsp;-out $dir/intermediate/certs/${ca_name}.csr \ </br>
+			&emsp;-outform PEM </br>
+		echo </br>
+		 </br>
+		echo "Generating Intermediate CA certificate from Root CA..." </br>
+		openssl ca \ </br>
+			&emsp;-config $dir/config/root.cnf \ </br>
+			&emsp;-extensions v3_intermediate_ca \ </br>
+			&emsp;-days 1825 \ </br>
+			&emsp;-notext \ </br>
+			&emsp;-batch \ </br>
+			&emsp;-in $dir/intermediate/certs/${ca_name}.csr \ </br>
+			&emsp;-out $dir/intermediate/certs/${ca_name}.crt </br>
+		echo </br>
+		 </br>
+		echo "Creating the certificate chain bundle..." </br>
+		cat $dir/intermediate/certs/${ca_name}.crt $dir/root/certs/${root_name}.crt > $dir/intermediate/certs/ca-chain-bundle.crt </br>
+		echo </br>
+		 </br>
+		echo "Generating server private key..." </br>
+		openssl genpkey \ </br>
+			&emsp;-algorithm RSA \ </br>
+			&emsp;-pkeyopt rsa_keygen_bits:2048 \ </br>
+			&emsp;-pass file:$dir/server/secret/localhost.enc \ </br>
+			&emsp;-out $dir/server/private/localhost.key </br>
+		echo </br>
+		 </br>
+		echo "Generating server CSR..." </br>
+		openssl req \ </br>
+			&emsp;-new -sha256 \ </br>
+			&emsp;-config $dir/config/intermediate.cnf \ </br>
+			&emsp;-passin file:$dir/server/secret/localhost.enc \ </br>
+			&emsp;-key $dir/server/private/localhost.key \ </br>
+			&emsp;-out $dir/server/certs/localhost.csr \ </br>
+			&emsp;-outform PEM </br>
+		echo </br>
+		 </br>
+		echo "Generating server certificate from Intermediate CA..." </br>
+		openssl ca \ </br>
+			&emsp;-config $dir/config/intermediate.cnf \ </br>
+			&emsp;-extfile $dir/config/ext/server.cnf \ </br>
+			&emsp;-days 365 \ </br>
+			&emsp;-notext \ </br>
+			&emsp;-batch \ </br>
+			&emsp;-passin file:$dir/intermediate/secret/${ca_name}.enc \ </br>
+			&emsp;-in $dir/server/certs/localhost.csr \ </br>
+			&emsp;-out $dir/server/certs/localhost.crt </br>
+		 </br>
+		echo "Generating client private key..." </br>
+		openssl genpkey \ </br>
+			&emsp;-algorithm RSA \ </br>
+			&emsp;-pkeyopt rsa_keygen_bits:2048 \ </br>
+			&emsp;-pass file:$dir/client/secret/${client_name}.enc \ </br>
+			&emsp;-out $dir/client/private/${client_name}.key </br>
+		echo </br>
+		 </br>
+		echo "Generating client CSR..." </br>
+		openssl req \ </br>
+			&emsp;-new -sha256 \ </br>
+			&emsp;-config $dir/config/intermediate.cnf \ </br>
+			&emsp;-passin file:$dir/client/secret/${client_name}.enc \ </br>
+			&emsp;-key $dir/client/private/${client_name}.key \ </br>
+			&emsp;-out $dir/client/certs/${client_name}.csr \ </br>
+			&emsp;-outform PEM </br>
+		echo </br>
+		 </br>
+		echo "Generating client certificate from Intermediate CA..." </br>
+		openssl ca \ </br>
+			&emsp;-config $dir/config/intermediate.cnf \ </br>
+			&emsp;-extfile $dir/config/ext/client.cnf \ </br>
+			&emsp;-days 365 \ </br>
+			&emsp;-notext \ </br>
+			&emsp;-batch \ </br>
+			&emsp;-passin file:$dir/intermediate/secret/${ca_name}.enc \ </br>
+			&emsp;-in $dir/client/certs/${client_name}.csr \ </br>
+			&emsp;-out $dir/client/certs/${client_name}.crt </br>
+		echo </br>
+		 </br>
+		chmod -R 0544 $dir/{config,intermediate,root,client,server} </br>
+		chmod -R 0500 $dir/*/secret </br>
+		chown -R 1000:1000 $dir/{config,intermediate,root,client,server} </br>
+		 </br>
+		echo "Don't forget to generate the PKCS#12 client certificate for the Firefox Personal store..." </br>
+	</span></p>
+	<p class="code-indent">```</p>
+</div>

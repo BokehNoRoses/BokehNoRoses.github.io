@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Yew App</title>
+		<link rel="stylesheet" href="styles.css"/>
+		<script type="text/javascript" src="index.js"></script>
+	</head>
+	<body>
+		<div class="intro" style="animation: gradient 10s ease 1;">
+			<div class="tooltip" id="tooltip"></div>
+	                <div class="term" style="animation: pop 4s ease 1;">
+	                    <div class="term-bar" id="term-bar" style="animation: pop 4s ease 1;">
+	                        <div class="term-tab" id="term-tab-0" style="animation: shrink-tab 7s ease 1;">
+	                            <button class="term-tab-btn" id="term-btn-0" value="0" onclick="updateTerm(this.value)" onmouseover="showTooltip(this.innerHTML)" onmouseout="hideTooltip()">
+	                                <h4 class="text">bokehnoroses@github:~$ echo 'Hello, World' | cowsay</h4>
+	                            </button>
+	                        </div>
+	                        <div class="term-tab" id="term-tab-1" style="animation: unhide-tab 8s ease 1;">
+	                            <button class="term-tab-btn" id="term-btn-1" value="1" onclick="updateTerm(this.value)" onmouseover="showTooltip(this.innerHTML)" onmouseout="hideTooltip()">
+	                                <h4 class="text">bokehnoroses@github:~$ cat introduction.md | less</h4>
+	                            </button>
+	                        </div>
+	                        <div class="term-tab" id="term-tab-2" style="animation: unhide-tab 9s ease 1;">
+	                            <button class="term-tab-btn" id="term-btn-2" value="2" onclick="updateTerm(this.value)" onmouseover="showTooltip(this.innerHTML)" onmouseout="hideTooltip()">
+	                                <h4 class="text">bokehnoroses@github:~$ cat accomplishments.md | less</h4>
+	                            </button>
+	                        </div>
+	                        <div class="term-tab" id="term-tab-3" style="animation: unhide-tab 10s ease 1;">
+	                            <button class="term-tab-btn" id="term-btn-3" value="3" onclick="updateTerm(this.value)" onmouseover="showTooltip(this.innerHTML)" onmouseout="hideTooltip()">
+	                                <h4 class="text">bokehnoroses@github:~$ cat useful_scripts.md | less</h4>
+	                            </button>
+	                        </div>
+	                        <div class="term-tab" id="term-tab-4" style="animation: unhide-tab 11s ease 1;">
+	                            <button class="term-tab-btn" id="term-btn-4" value="4" onclick="updateTerm(this.value)" onmouseover="showTooltip(this.innerHTML)" onmouseout="hideTooltip()">
+	                                <h4 class="text">bokehnoroses@github:~$ cat wip.md | less</h4>
+	                            </button>
+	                        </div>
+	                    </div>
+	                    <div class="term-body" id="term-body">
+				    <span class="type" style="--n:101">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</span>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="certs">
+	                 <div class="certs-card" id="card-1">
+	                    <img src="assets/images/CompTIA_Security+.png" alt="CompTIA Security+"/>
+	                    <h2 class="text">CompTIA Security+ SY0-601</h2>
+	                    <h4 class="text">Obtained Date: November 2021</h4>
+	                    <h4 class="text">Expiration Date: November 2027</h4>
+	                 </div>
+	                 <div class="certs-card" id="card-2">
+	                    <img src="assets/images/AZ-104.png" alt="Azure System Administrator Associate"/>
+	                    <h2 class="text">Azure Administrator AZ-104</h2>
+	                    <h4 class="text">Obtained Date: November 2022</h4>
+	                    <h4 class="text">Expiration Date: November 2025</h4>
+	                 </div>
+	                 <div class="certs-card" id="card-3">
+	                    <img src="assets/images/CompTIA_Linux+.png" alt="CompTIA Linux+"/>
+	                    <h2 class="text">CompTIA Linux+ XK0-005</h2>
+	                    <h4 class="text">Obtained Date: March 2024</h4>
+	                    <h4 class="text">Expiration Date: March 2027</h4>
+	                 </div>
+	            </div>
+	            <div class="projects">
+	                <div class="term">
+	                    <div class="term-bar"></div>
+	                    <div class="term-body" style="display: flex; justify-content: center; align-items: center; padding: 0 0 !important; margin: 0 0 !important; height: 93% !important; width: 100% !important;">
+	                        <div class="carousel-sidebar">
+	                            <button class="carousel-btn" id="c-bk" value="4" onclick="updateCarousel(this.value)"><</button>
+	                        </div>
+	                        <div class="carousel-body">
+	                            <div class="carousel-picture">
+	                                <img src="nonexistent.png" alt="Some Picture Text" id="c-img"/>
+	                                <div class="carousel-synopsis" id="c-synop">
+	                                    <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+	                                </div>
+	                            </div>
+	                            <div class="carousel-btn-bar">
+	                                <input type="radio" id="c-btn-0" name="carousel-input" value="0" onclick="updateCarousel(this.value)" checked=true/>
+	                                <input type="radio" id="c-btn-1" name="carousel-input" value="1" onclick="updateCarousel(this.value)"/>
+	                                <input type="radio" id="c-btn-2" name="carousel-input" value="2" onclick="updateCarousel(this.value)"/>
+	                                <input type="radio" id="c-btn-3" name="carousel-input" value="3" onclick="updateCarousel(this.value)"/>
+	                            </div>
+	                        </div>
+	                        <div class="carousel-sidebar">
+	                            <button class="carousel-btn" id="c-fw" value="5" onclick="updateCarousel(this.value)">></button>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	</body>
+</html>

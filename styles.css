@@ -1,0 +1,434 @@
+/* ################## */
+/* ### VARIABLES  ### */
+/* ################## */
+
+/* https://github.com/catppuccin/nvim/blob/main/lua/catppuccin/palettes/mocha.lua */
+:root {
+	--rosewater: #f4dbd6;
+	--flamingo: #f0c6c6;
+	--pink: #f5bde6;
+	--mauve: #c6a0f6;
+	--red: #ed8796;
+	--maroon: #ee99a0;
+	--peach: #f5a97f;
+	--yellow: #eed49f;
+	--green: #a6da95;
+	--teal: #8bd5ca;
+	--sky: #91d7e3;
+	--sapphire: #7dc4e4;
+	--blue: #8aadf4;
+	--lavender: #b7bdf8;
+	--text: #cad3f5;
+	--subtext1: #b8c0e0;
+	--subtext0: #a5adcb;
+	--overlay2: #939ab7;
+	--overlay1: #8087a2;
+	--overlay0: #6e738d;
+	--surface2: #5b6078;
+	--surface1: #494d64;
+	--surface0: #363a4f;
+	--base: #24273a;
+	--mantle: #1e2030;
+	--crust: #181926;
+	--off-white: #F2E9EA;
+}
+
+/* ################## */
+/* ### CSS STYLES ### */
+/* ################## */
+
+/* https://codepen.io/P1N2O/pen/pyBNzX */
+html, body {
+        background-color: var(--off-white); /* off-white */
+        font-family: sans-serif;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+	min-height: 100vh;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+	margin: 0 0;
+	padding: 0 0;
+}
+
+li {
+	margin: 0 0 15px 0;
+}
+
+.intro { 
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background: linear-gradient(#5d6bef, var(--lavender), var(--off-white));
+	background-size: 200% 200%;
+	background-position: 100% 100%;
+	animation: gradient 10s ease 1;
+}
+
+/* https://www.w3schools.com/csS/css3_shadows_box.asp */
+div.term {
+	height: 70%;
+	width: 80%;
+	background: var(--base);
+	border-radius: 25px 25px 0px 0px;
+	box-shadow: 0 4px 8px 0 var(--mantle), 0 6px 20px 0 var(--mantle); 
+}
+                    
+div.term-bar {
+	height: 7%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 25px 25px 0px 0px;
+	background: var(--crust);
+	color: var(--off-white);
+}
+
+div.term-body {
+	font-family: monospace;
+	height: 90%;
+	width: 96%;
+	padding: 0 2% 0 2%;
+	margin: 1% 0;
+	color: var(--off-white);
+	overflow-wrap: break-word;
+	overflow-y: scroll;
+}
+                    
+div.term-tab {
+	height: 100%;
+	width: 15%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 2% 0 2%;
+}
+
+button.term-tab-btn {
+	height: 100%;
+	width: 100%;
+	background: var(--crust);
+	color: var(--off-white);
+	border: none;
+	cursor: pointer;
+	padding: 0 0;
+	margin: 0 0;
+	display: flex;
+	align-items: center;
+	animation: shrink-tab-btn 10s ease 1;
+}
+
+button.term-tab-btn:hover {
+	color: white;
+}
+
+button.term-tab-btn .text {
+	padding: 0 0;
+	margin: 0 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+div.certs {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	animation: expand 11s ease 1 forwards;
+}
+
+@keyframes expand {
+	0% { height: 0px; }
+	90% { height: 0px; }
+	100% { height: 100vh; }
+}
+
+/* https://www.w3schools.com/csS/css3_shadows_box.asp */
+div.certs-card {
+	height: 60%;
+	width: 25%;
+	margin: 0 3%;
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	flex-direction: column;
+	background-color: white;
+	border: 1px solid black;
+	box-shadow: 0 6px 12px 12px var(--flamingo), 0 8px 22px 0 var(--flamingo); 
+}
+
+@keyframes jump {
+	0% {
+		transform:
+			scale(0)
+			translateY(50rem);
+		opacity: 0.0;
+	}
+	50% {
+		transform:
+			scale(1.1)
+			translateY(-5rem);
+		opacity: 0.7;
+	}
+	100% {
+		transform: 
+			scale(1)
+			translateY(0);
+		opacity: 1.0;
+	}
+}
+
+div.certs-card img {
+	height: 60%;
+	width: 80%;
+	margin: 0 10% 10% 10%;
+}
+
+div.certs-card .text {
+	color: var(--base);
+	margin: 0 0;
+	padding: 0 0;
+}
+
+div.projects {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: linear-gradient(var(--off-white), var(--lavender), #5d6bef);
+	animation: expand 15s ease 1 forwards;
+}
+
+div.carousel-sidebar {
+	height: 100%;
+	width: 5%;
+	margin: 0 .2%;
+	padding: 0 0;
+}
+
+div.carousel-body {
+	height: 100%;
+	width: 90%;
+	margin: 0 0;
+	padding: 0 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+button.carousel-btn {
+	height: 100%;
+	width: 100%;
+	background-color: var(--surface2);
+	border: none;
+	font-size: 48px;
+	color: #363a4f;
+	transition: color 0.5s, background-color 0.5s;
+}
+
+button.carousel-btn:hover {
+	background-color: #6e738d;
+	color: var(--off-white);
+}
+
+div.carousel-picture {
+	height: 90%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+div.carousel-picture img, div.carousel-synopsis {
+	height: 80%;
+	width: 45%;
+	margin: 0 auto;
+}
+
+.carousel-synopsis {
+	display: flex;
+	overflow-y: hidden;
+}
+
+.carousel-synopsis p, .carousel-synopsis h1, .carousel-synopsis h2, .carousel-synopsis h3, .carousel-synopsis h4, .carousel-synopsis h5, .carousel-synopsis h6 {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow-wrap: break-word;
+}
+
+div.carousel-btn-bar {
+	height: 10%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+div.carousel-btn-bar input[type="radio"] {
+	appearance: none;
+	box-sizing: border-box;
+	background: var(--off-white);
+	margin: 0 1%;
+	padding: 0;
+	font: inherit;
+	width: 1.15rem;
+	height: 1.5rem;
+	border: 0.15em solid var(--surface2);
+	border-radius: 33%;
+	outline: none;
+	transition: border-color 0.2s, background-color 0.2s;
+}
+
+div.carousel-btn-bar input[type="radio"]:checked {
+	border-color: var(--off-white);
+	background-color: var(--surface2);
+	background-clip: content-box;
+}
+
+/* https://www.w3schools.com/css/css_tooltip.asp */
+.tooltip {
+  visibility: hidden;
+  width: 90%;
+  background-color: var(--crust);
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  margin: 15px 0;
+  bottom: 90%;
+  position: absolute;
+  border-radius: 6px;
+}
+
+/* https://dev.to/afif/a-multi-line-css-only-typewriter-effect-3op3 */
+.type {
+  font-family: monospace;
+  color: #0000; /* transparent */
+  background:
+    linear-gradient(-90deg, var(--base) 5px,#0000 0) 10px 0, /* type cursor */
+    linear-gradient(var(--text-color, var(--off-white)) 0 0) 0 0; /* text color */
+  background-size:calc(var(--n)*1ch) 200%;
+  -webkit-background-clip:padding-box,text;
+  background-clip:padding-box,text;
+  background-repeat:no-repeat;
+  animation: 
+    /* b .7s infinite steps(1), */ 
+    t calc(var(--n)*var(--time, .008s)) steps(var(--n)) forwards;
+}
+
+.invisible {
+	color: var(--base) !important;
+	background-color: var(--base) !important;
+}
+
+.flip {
+	color: var(--text-color, var(--red));
+	text-decoration: underline var(--text-color, var(--red));
+	margin: 15px 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: row;
+}
+
+.flip p, .flip h1, .flip h2, .flip h3, .flip h4, .flip h5, .flip h6 {
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-ms-backface-visibility: hidden;
+	-o-backface-visibility: hidden;
+	backface-visibility: hidden;
+	animation: flip var(--time) linear 1 forwards;
+}
+
+.inline-code {
+	color: var(--base);
+	background-color: var(--subtext0);
+}
+
+.code-block {
+	color: var(--green);
+	background-color: var(--crust);
+	border: 2px groove var(--crust);
+	border-radius: 5px;
+	padding: 10px 5px;
+}
+
+.code-block .code-indent {
+	margin: 10px 0;
+}
+
+.code-block .code-tag {
+	display: inline-block; 
+	width: 90%; 
+	text-align: right;
+}
+
+@keyframes flip {
+	from { transform: rotateY(180deg) }
+	to { transform: rotateY(0deg) }
+}
+
+@keyframes t{
+  from {background-size:0 200%}
+}
+@keyframes b{
+  50% {background-position:0 -100%,0 0}
+}
+
+/* ########################### */
+/* ### ANIMATION KEYFRAMES ### */
+/* ########################### */
+
+@keyframes gradient {
+	0% { background-position: 100% 100%; }
+	50% { background-position: 100% 0%; }
+	100% { background-position: 100% 100%; }
+}
+
+@keyframes pop {
+	0% { opacity: 0; border-radius: 0px 0px 0px 0px; transform: scale(0.1, 0.1); }
+	80% { opacity: 1; border-radius: 0px 0px 0px 0px; transform: scale(1.1, 1.1); }
+	100% { opacity: 1; border-radius: 25px 25px 0px 0px; transform: scale(1, 1); }
+}
+
+@keyframes shrink-tab {
+	0% { width: 100%; }
+	50% { width: 100%; }
+	100% { width: 15%; }
+}
+
+@keyframes shrink-tab-btn {
+	0% { justify-content: center; }
+	75% { justify-content: center; }
+	100% { justify-content: flex-start; }
+}
+
+@keyframes unhide-tab {
+	0% { width: 0; margin: 0 0; }
+	90% { width: 0; margin: 0 0; }
+	100% { width: 15%; margin: 0 2% 0 2%; }
+}
+
+@keyframes typing {
+	0% { width: 0; white-space: nowrap; margin: 0 100% 0 0; }
+	90% { width: 100%; white-space: nowrap; margin: 0 0; }
+	100% { width: 100%; white-space: wrap; margin: 0 0; }
+}
+
+@keyframes blink-caret {
+	from, to { color: var(--base); background-color: var(--base); }
+	50% { color: var(--mauve); background-color: var(--mauve); }
+}

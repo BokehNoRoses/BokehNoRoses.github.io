@@ -1,0 +1,8 @@
+<!doctype html><meta charset=utf-8><title>Yew App</title><script type=module>import init, * as bindings from '/bokehnoroses-e5e80c961b335724.js';
+const wasm = await init('/bokehnoroses-e5e80c961b335724_bg.wasm');
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));</script><link href=/styles-111bf9195705885e.css integrity=sha384-rV2zx6dg4W8fLH3/9GAVTYdSh3yqcs/UGw1VB6pb+Z9fJskL2ddDUekTYM2hpreD rel=stylesheet><link crossorigin href=/bokehnoroses-e5e80c961b335724.js integrity=sha384-uoJVKL/MdC07nhWb3lrAMfGiksMU05OrSb+i8L6e/w87JG862HPB2N3HUe1pFHne rel=modulepreload><link as=fetch crossorigin href=/bokehnoroses-e5e80c961b335724_bg.wasm integrity=sha384-2dJhRRTLQMuXuu1faI2QQ4vtG361r0licxh4SaimX7Gh7hULo00z6SNfgWPf6qwm rel=preload type=application/wasm></head><body></body></html>
