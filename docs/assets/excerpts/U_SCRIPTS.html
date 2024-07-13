@@ -1,18 +1,18 @@
 <h2><span style="color: var(--green);">bokehnorose@github</span>:<span style="color: var(--green);">~</span>$ <span class="type" style="--n:35">cat useful_scripts.md | less</span> <span style="animation: blink-caret .7s infinite">!</span></h2>
 <div class="flip">
-	<h1 style="--time: 0.8s;">Useful</h1>
-	<h1 style="--time: 1.0s;">&ensp;Scripts</h1>
+	<h1 class="text" style="--time: 0.8s;">Useful</h1>
+	<h1 class="text" style="--time: 1.0s;">&ensp;Scripts</h1>
 </div>
 <h2><span class="type" style="--n:50">&emsp;PipeWire, ALSA, and PulseAudio</span></h2>
 </br>
 <div class="code-block">
 	<p class="code-indent">```<span class="code-tag">bash</span></p>
-	<p><span class="type" style="--n: 100; --text-color: var(--green);"># I use the following to resample incoming audio on monitors attached to the PipeWire daemon</span></p>
-	<p><span class="type" style="--n: 150; --text-color: var(--green);"># It's a little more involved than using `pacmd list-sinks | grep -Ei 'index:|name:'` with PulseAudio</span></p>
-	<p><span class="type" style="--n: 150; --text-color: var(--green);"># Chiefly for the reason that audio sources aren't constantly attached to a Capture or Monitor until they are transmitting in PipeWire</span></p>
-	<p><span class="type" style="--n: 150; --text-color: var(--green);"># So I had to compare where `pw-record` was attaching by default with a utility like `qpwgraph` and came up with the following code:</span></p>
+	<p class="code-comment"><span class="type" style="--n: 100; --text-color: var(--green);"># I use the following to resample incoming audio on monitors attached to the PipeWire daemon</span></p>
+	<p class="code-comment"><span class="type" style="--n: 150; --text-color: var(--green);"># It's a little more involved than using `pacmd list-sinks | grep -Ei 'index:|name:'` with PulseAudio</span></p>
+	<p class="code-comment"><span class="type" style="--n: 150; --text-color: var(--green);"># Chiefly for the reason that audio sources aren't constantly attached to a Capture or Monitor until they are transmitting in PipeWire</span></p>
+	<p class="code-comment"><span class="type" style="--n: 150; --text-color: var(--green);"># So I had to compare where `pw-record` was attaching by default with a utility like `qpwgraph` and came up with the following code:</span></p>
 	</br>
-	<p><span class="type" style="--n: 1000">
+	<p><span class="type" style="--n: 1000; --time: .003s">
 		</br>$ cat pwrec.sh</br>
 		</br>#!/bin/bash</br></br>
 		shopt -s extglob </br>
@@ -50,15 +50,15 @@
 	<p class="code-indent">```</p>
 </div>
 </br></br>
-<h2><span class="type" style="--n:50">&emsp;Cryptography</span></h2>
+<h2>&emsp;Cryptography</h2>
 </br>
 <div class="code-block">
 	<p class="code-indent">```<span class="code-tag">bash</span></p>
-	<p><span class="type" style="--n: 100; --text-color: var(--green);"># I used the following code to help practice with setting the server-side and client-side certificates for Jellyfin server over Traefik</span></p>
-	<p><span class="type" style="--n: 150; --text-color: var(--green);"># It's pretty inflexible as is, but it was good enough for me to work through the CSR process using CAs in the non-conventional way</span></p>
-	<p><span class="type" style="--n: 150; --text-color: var(--green);"># All credit goes to GoLinuxCloud.com for their very informative tutorial that I based the structure of the program on</span></p>
+	<p class="code-comment"># I used the following code to help practice with setting the server-side and client-side certificates for Jellyfin server over Traefik</p>
+	<p class="code-comment"># It's pretty inflexible as is, but it was good enough for me to work through the CSR process using CAs in the non-conventional way</p>
+	<p class="code-comment"># All credit goes to GoLinuxCloud.com for their very informative tutorial that I based the structure of the program on</p>
 	</br>
-	<p><span class="type" style="--n: 500">
+	<p>
 		</br>$ cat genenc.sh</br>
 		</br>#!/usr/bin/bash</br></br>
 		if [[ -z $@ ]]; then </br>
@@ -73,8 +73,8 @@
 		openssl enc -aes256 -pbkdf2 -salt -in ${OUTFILE}_pt.enc -out ${OUTFILE}.enc </br>
 		chmod 0500 {${OUTFILE}_pt.enc,${OUTFILE}.enc} </br>
 		</br>
-	</span></p>
-	<p><span class="type" style="--n: 16741; --time: .0025s">
+	</p>
+	<p>
 		</br>$ cat genssl.sh</br>
 		</br>#!/usr/bin/bash</br></br>
 		# MUST BE RUN AS SUDO!
@@ -497,6 +497,6 @@
 		chown -R 1000:1000 $dir/{config,intermediate,root,client,server} </br>
 		 </br>
 		echo "Don't forget to generate the PKCS#12 client certificate for the Firefox Personal store..." </br>
-	</span></p>
+	</p>
 	<p class="code-indent">```</p>
 </div>

@@ -32,7 +32,7 @@ impl Component for Terminal {
 
     fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            termtext: COWSAY.to_string(),
+            termtext: "<h1 id=\"intro-text\">Click a tab above while you wait for content to load below!</h1>".to_string(),
             tooltiptext: "".to_string(),
             tooltipvisible: false,
         }

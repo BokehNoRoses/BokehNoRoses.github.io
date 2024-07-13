@@ -39,18 +39,15 @@
 
 /* https://codepen.io/P1N2O/pen/pyBNzX */
 html, body {
-        background-color: var(--off-white); /* off-white */
         font-family: sans-serif;
+	min-height: 100vh;
+        background-color: var(--off-white); /* off-white */
         padding: 0;
         margin: 0;
-        display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-	min-height: 100vh;
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+p, h1, h2, h3, h4, h5, h6, .term-tab-btn, .term-tab-btn .text, .certs-card .text, .carousel-sidebar, .carousel-body {
 	margin: 0 0;
 	padding: 0 0;
 }
@@ -59,274 +56,211 @@ li {
 	margin: 0 0 15px 0;
 }
 
-.intro { 
-	height: 100vh;
-	width: 100vw;
+html, body, .intro, #intro-text, .certs, .projects, .term-bar, .term-bar #gallery-text, .term-tab, .term-tab-btn, .certs-card, .certs-card .text, .carousel-body, .carousel-picture, .carousel-synopsis, .carousel-synopsis .text, .carousel-btn-bar, .flip {
 	display: flex;
-	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+}
+
+.intro, .certs, .projects {
+	height: 100vh;
+	width: 100vw;
+}
+
+#intro-text, .term, .term-bar, .term-bar #gallery-text, .term-body, .term-tab-btn, .certs-card, .certs-card img, .carousel-sidebar, .carousel-body, .carousel-btn, .carousel-picture, .carousel-picture img, .carousel-picture audio, .carousel-synopsis, .carousel-synopsis .text, .carousel-btn-bar {
+	height: 100%;
+	width: 100%;
+}
+
+.intro { 
 	background: linear-gradient(#5d6bef, var(--lavender), var(--off-white));
-	background-size: 200% 200%;
 	background-position: 100% 100%;
+	background-size: 200% 200%;
+	flex-direction: column;
 	animation: gradient 10s ease 1;
 }
 
+#intro-text {
+	text-align: center;
+}
+
+/* https://www.w3schools.com/css/css_tooltip.asp */
+.tooltip {
+	visibility: hidden;
+	position: absolute;
+	bottom: 90%;
+	width: 90% !important;
+	color: #fff;
+	background-color: var(--crust);
+	border-radius: 6px;
+	text-align: center;
+	padding: 5px 0;
+	margin: 15px 0;
+}
+
 /* https://www.w3schools.com/csS/css3_shadows_box.asp */
-div.term {
-	height: 70%;
-	width: 80%;
+.term {
+	height: 70% !important;
+	width: 80% !important;
 	background: var(--base);
 	border-radius: 25px 25px 0px 0px;
 	box-shadow: 0 4px 8px 0 var(--mantle), 0 6px 20px 0 var(--mantle); 
 }
                     
-div.term-bar {
-	height: 7%;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-radius: 25px 25px 0px 0px;
-	background: var(--crust);
+.term-bar {
+	height: 7% !important;
 	color: var(--off-white);
+	background: var(--crust);
+	border-radius: 25px 25px 0px 0px;
 }
 
-div.term-body {
+.term-bar #gallery-text {
+	overflow: hidden;
+}
+
+.term-body {
+	height: 90% !important;
+	width: 96% !important;
 	font-family: monospace;
-	height: 90%;
-	width: 96%;
+	color: var(--off-white);
 	padding: 0 2% 0 2%;
 	margin: 1% 0;
-	color: var(--off-white);
 	overflow-wrap: break-word;
 	overflow-y: scroll;
 }
                     
-div.term-tab {
-	height: 100%;
+.term-tab {
 	width: 15%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	margin: 0 2% 0 2%;
 }
 
-button.term-tab-btn {
-	height: 100%;
-	width: 100%;
-	background: var(--crust);
+.term-tab-btn {
 	color: var(--off-white);
+	background: var(--crust);
 	border: none;
 	cursor: pointer;
-	padding: 0 0;
-	margin: 0 0;
-	display: flex;
-	align-items: center;
 	animation: shrink-tab-btn 10s ease 1;
 }
 
-button.term-tab-btn:hover {
+.term-tab-btn:hover {
 	color: white;
 }
 
-button.term-tab-btn .text {
-	padding: 0 0;
-	margin: 0 0;
+.term-tab-btn .text {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-div.certs {
-	height: 100vh;
-	width: 100vw;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.certs {
 	animation: expand 11s ease 1 forwards;
 }
 
-@keyframes expand {
-	0% { height: 0px; }
-	90% { height: 0px; }
-	100% { height: 100vh; }
-}
-
 /* https://www.w3schools.com/csS/css3_shadows_box.asp */
-div.certs-card {
-	height: 60%;
-	width: 25%;
-	margin: 0 3%;
-	display: flex;
-	justify-content: start;
-	align-items: center;
-	flex-direction: column;
+.certs-card {
+	height: 60% !important;
+	width: 25% !important;
 	background-color: white;
-	border: 1px solid black;
+	margin: 0 3%;
+	justify-content: start !important;
+	flex-direction: column;
+	border: 1px solid var(--base);
 	box-shadow: 0 6px 12px 12px var(--flamingo), 0 8px 22px 0 var(--flamingo); 
 }
 
-@keyframes jump {
-	0% {
-		transform:
-			scale(0)
-			translateY(50rem);
-		opacity: 0.0;
-	}
-	50% {
-		transform:
-			scale(1.1)
-			translateY(-5rem);
-		opacity: 0.7;
-	}
-	100% {
-		transform: 
-			scale(1)
-			translateY(0);
-		opacity: 1.0;
-	}
-}
-
-div.certs-card img {
-	height: 60%;
-	width: 80%;
+.certs-card img {
+	height: 60% !important;
+	width: 80% !important;
 	margin: 0 10% 10% 10%;
 }
 
-div.certs-card .text {
+.certs-card .text {
+	width: 100%;
 	color: var(--base);
-	margin: 0 0;
-	padding: 0 0;
+	text-align: center;
 }
 
-div.projects {
-	height: 100vh;
-	width: 100vw;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.projects {
 	background: linear-gradient(var(--off-white), var(--lavender), #5d6bef);
 	animation: expand 15s ease 1 forwards;
 }
 
-div.carousel-sidebar {
-	height: 100%;
-	width: 5%;
-	margin: 0 .2%;
-	padding: 0 0;
+.carousel-sidebar {
+	width: 5% !important;
+	margin: 0 .2% !important;
 }
 
-div.carousel-body {
-	height: 100%;
-	width: 90%;
-	margin: 0 0;
-	padding: 0 0;
-	display: flex;
+.carousel-body {
+	width: 90% !important;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 }
 
-button.carousel-btn {
-	height: 100%;
-	width: 100%;
+.carousel-btn {
+	font-size: 48px;
+	color: var(--surface0);
 	background-color: var(--surface2);
 	border: none;
-	font-size: 48px;
-	color: #363a4f;
 	transition: color 0.5s, background-color 0.5s;
 }
 
-button.carousel-btn:hover {
-	background-color: #6e738d;
+.carousel-btn:hover {
+	background-color: var(--overlay0);
 	color: var(--off-white);
 }
 
-div.carousel-picture {
-	height: 90%;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.carousel-picture {
+	height: 90% !important;
 }
 
-div.carousel-picture img, div.carousel-synopsis {
-	height: 80%;
-	width: 45%;
+.carousel-picture img, .carousel-picture audio, .carousel-synopsis {
+	height: 80% !important;
+	width: 45% !important;
 	margin: 0 auto;
 }
 
 .carousel-synopsis {
-	display: flex;
+	overflow-wrap: break-word;
 	overflow-y: hidden;
 }
 
-.carousel-synopsis p, .carousel-synopsis h1, .carousel-synopsis h2, .carousel-synopsis h3, .carousel-synopsis h4, .carousel-synopsis h5, .carousel-synopsis h6 {
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow-wrap: break-word;
+.carousel-btn-bar {
+	height: 10% !important;
 }
 
-div.carousel-btn-bar {
-	height: 10%;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-div.carousel-btn-bar input[type="radio"] {
+.carousel-btn-bar input[type="radio"] {
 	appearance: none;
-	box-sizing: border-box;
-	background: var(--off-white);
-	margin: 0 1%;
-	padding: 0;
-	font: inherit;
-	width: 1.15rem;
+	outline: none;
 	height: 1.5rem;
+	width: 1.15rem;
+	font: inherit;
+	background: var(--off-white);
 	border: 0.15em solid var(--surface2);
 	border-radius: 33%;
-	outline: none;
+	box-sizing: border-box;
+	margin: 0 1%;
+	padding: 0;
 	transition: border-color 0.2s, background-color 0.2s;
 }
 
-div.carousel-btn-bar input[type="radio"]:checked {
+.carousel-btn-bar input[type="radio"]:checked {
 	border-color: var(--off-white);
 	background-color: var(--surface2);
 	background-clip: content-box;
 }
 
-/* https://www.w3schools.com/css/css_tooltip.asp */
-.tooltip {
-  visibility: hidden;
-  width: 90%;
-  background-color: var(--crust);
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  margin: 15px 0;
-  bottom: 90%;
-  position: absolute;
-  border-radius: 6px;
-}
-
 /* https://dev.to/afif/a-multi-line-css-only-typewriter-effect-3op3 */
 .type {
-  font-family: monospace;
-  color: #0000; /* transparent */
-  background:
-    linear-gradient(-90deg, var(--base) 5px,#0000 0) 10px 0, /* type cursor */
-    linear-gradient(var(--text-color, var(--off-white)) 0 0) 0 0; /* text color */
-  background-size:calc(var(--n)*1ch) 200%;
-  -webkit-background-clip:padding-box,text;
-  background-clip:padding-box,text;
-  background-repeat:no-repeat;
-  animation: 
-    /* b .7s infinite steps(1), */ 
-    t calc(var(--n)*var(--time, .008s)) steps(var(--n)) forwards;
+	font-family: monospace;
+	color: #0000; /* transparent */
+	background:
+		linear-gradient(-90deg, var(--base) 5px, #0000 0) 10px 0, /* type cursor */
+		linear-gradient(var(--text-color, var(--off-white)) 0 0) 0 0; /* text color */
+	background-clip: padding-box, text;
+	background-repeat: no-repeat;
+	background-size: calc(var(--n)*1ch) 200%;
+	animation: 
+		/* b .7s infinite steps(1), */ 
+		t calc(var(--n)*var(--time, .008s)) steps(var(--n)) forwards;
 }
 
 .invisible {
@@ -338,17 +272,10 @@ div.carousel-btn-bar input[type="radio"]:checked {
 	color: var(--text-color, var(--red));
 	text-decoration: underline var(--text-color, var(--red));
 	margin: 15px 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	flex-direction: row;
 }
 
-.flip p, .flip h1, .flip h2, .flip h3, .flip h4, .flip h5, .flip h6 {
-	-webkit-backface-visibility: hidden;
-	-moz-backface-visibility: hidden;
-	-ms-backface-visibility: hidden;
-	-o-backface-visibility: hidden;
+.flip .text {
 	backface-visibility: hidden;
 	animation: flip var(--time) linear 1 forwards;
 }
@@ -359,34 +286,26 @@ div.carousel-btn-bar input[type="radio"]:checked {
 }
 
 .code-block {
-	color: var(--green);
 	background-color: var(--crust);
 	border: 2px groove var(--crust);
 	border-radius: 5px;
 	padding: 10px 5px;
 }
 
-.code-block .code-indent {
+.code-indent, .code-tag, .code-comment {
+	color: var(--green);
+}
+
+.code-indent {
 	margin: 10px 0;
 }
 
-.code-block .code-tag {
+.code-tag {
 	display: inline-block; 
 	width: 90%; 
 	text-align: right;
 }
 
-@keyframes flip {
-	from { transform: rotateY(180deg) }
-	to { transform: rotateY(0deg) }
-}
-
-@keyframes t{
-  from {background-size:0 200%}
-}
-@keyframes b{
-  50% {background-position:0 -100%,0 0}
-}
 
 /* ########################### */
 /* ### ANIMATION KEYFRAMES ### */
@@ -431,4 +350,30 @@ div.carousel-btn-bar input[type="radio"]:checked {
 @keyframes blink-caret {
 	from, to { color: var(--base); background-color: var(--base); }
 	50% { color: var(--mauve); background-color: var(--mauve); }
+}
+
+@keyframes flip {
+	from { transform: rotateY(180deg); }
+	to { transform: rotateY(0deg); }
+}
+
+@keyframes t {
+  	from { background-size:0 200%; }
+}
+
+@keyframes b { 
+	50% { background-position:0 -100%, 0 0; } 
+}
+
+@keyframes jump {
+	0% { transform: scale(0) translateY(0); opacity: 0.0; }
+	80% { transform: scale(0) translateY(0); opacity: 0.0; }
+	90% { transform: scale(1.1) translateY(-5rem); opacity: 0.7; }
+	100% { transform: scale(1) translateY(0); opacity: 1.0; }
+}
+
+@keyframes expand {
+	0% { height: 0px; }
+	90% { height: 0px; }
+	100% { height: 100vh; }
 }

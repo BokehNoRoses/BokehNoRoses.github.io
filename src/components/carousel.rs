@@ -79,7 +79,7 @@ impl Component for Carousel {
         html! {
             <div class="projects">
                 <div class="term">
-                    <div class="term-bar"></div>
+                    <div class="term-bar"><h2 id="gallery-text">{ "Gallery of Works" }</h2></div>
                     <div class="term-body" style="display: flex; justify-content: center; align-items: center; padding: 0 0 !important; margin: 0 0 !important; height: 93% !important; width: 100% !important;">
                         <div class="carousel-sidebar">
                             <button class="carousel-btn" id="c-bk" onclick={ctx.link().callback(|_| Msg::PrevCarousel)}>{ "<" }</button>
