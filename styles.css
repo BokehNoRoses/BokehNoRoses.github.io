@@ -56,7 +56,7 @@ li {
 	margin: 0 0 15px 0;
 }
 
-html, body, .intro, #intro-text, .certs, .projects, .term-bar, .term-bar #gallery-text, .term-tab, .term-tab-btn, .certs-card, .certs-card .text, .carousel-body, .carousel-picture, .carousel-synopsis, .carousel-synopsis .text, .carousel-btn-bar, .flip {
+html, body, .intro, #intro-text, .certs, .projects, .term-bar, .term-bar #gallery-text, .term-tab, .term-tab-btn, .certs-card, .certs-card .text, .carousel-body, .carousel-picture, .carousel-synopsis, .carousel-btn-bar, .flip {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -67,7 +67,7 @@ html, body, .intro, #intro-text, .certs, .projects, .term-bar, .term-bar #galler
 	width: 100vw;
 }
 
-#intro-text, .term, .term-bar, .term-bar #gallery-text, .term-body, .term-tab-btn, .certs-card, .certs-card img, .carousel-sidebar, .carousel-body, .carousel-btn, .carousel-picture, .carousel-picture img, .carousel-picture audio, .carousel-synopsis, .carousel-synopsis .text, .carousel-btn-bar {
+#intro-text, .term, .term-bar, .term-bar #gallery-text, .term-body, .term-tab-btn, .certs-card, .certs-card img, .carousel-sidebar, .carousel-body, .carousel-btn, .carousel-picture, .carousel-picture img, .carousel-picture audio, .carousel-synopsis, .carousel-btn-bar {
 	height: 100%;
 	width: 100%;
 }
